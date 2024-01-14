@@ -16,7 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from ingredient import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('ingredient/create/', views.create_ingredient, name='create_ingredient'),
+    path('ingredient/all/', views.get_all_ingredients, name='get_all_ingredients'),
+    path('ingredient/update/<int:id>/', views.update_ingredient, name='update_ingredient'),
+
 ]
