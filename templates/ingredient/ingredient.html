@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Інгредієнти{% endblock %}
+
+{% block content %}
+    <h1>Інгредієнти</h1>
+    <p>Тут ви можете знайти інформацію про інгредієнти та їх списки.</p>
+    <ul>
+        <li><a href="{% url 'create_ingredient' %}">Створити новий інгредієнт</a></li>
+        <li><a href="{% url 'all_ingredients' %}">Всі інгредієнти</a></li>
+    </ul>
+{% endblock %}
