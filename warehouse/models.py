@@ -3,7 +3,7 @@ from ingredient.models import Ingredient
 
 
 class Warehouse(models.Model):
-    date = models.DateField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
 
 
 class WarehouseRecordItem(models.Model):
