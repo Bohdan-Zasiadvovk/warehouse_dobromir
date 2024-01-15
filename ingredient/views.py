@@ -29,7 +29,7 @@ def get_all_ingredients(request):
 def update_ingredient(request, ingredient_id):
     ingredient = get_object_or_404(Ingredient, id=ingredient_id)
 
-    if request.method == "POST":
+    if request.method == "GET":
         form = IngredientForm(request.POST, instance=ingredient)
         if form.is_valid():
             form.save()
