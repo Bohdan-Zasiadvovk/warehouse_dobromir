@@ -28,16 +28,15 @@ def get_all_packages(request):
 
 def update_package(request, package_id):
     package = get_object_or_404(Package, id=package_id)
-
     if request.method == "GET":
-        form = PackageForm(request.POST, instance=package)
-        if form.is_valid():
+        return render(request, 'package/updatepackage.html', {'package': package, 'form': PackageForm(instance=package)})
+    else:
+        try:
+            form = PackageForm(request.POST, instance=package)
             form.save()
             return redirect('all_packages')
-    else:
-        form = PackageForm(instance=package)
-
-    return render(request, 'package/updatepackage.html', {'form': form, 'package': package})
+        except ValueError:
+            return render(request, 'package/updatepackage.html', {'package': package, 'form': PackageForm(instance=package)})
 
 
 def delete_package(request, package_id):

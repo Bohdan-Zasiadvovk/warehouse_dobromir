@@ -28,16 +28,16 @@ def get_all_ingredients(request):
 
 def update_ingredient(request, ingredient_id):
     ingredient = get_object_or_404(Ingredient, id=ingredient_id)
-
     if request.method == "GET":
-        form = IngredientForm(request.POST, instance=ingredient)
-        if form.is_valid():
+        return render(request, 'ingredient/updateingredient.html', {'ingredient': ingredient, 'form': IngredientForm(instance=ingredient)})
+    else:
+        try:
+            form = IngredientForm(request.POST, instance=ingredient)
             form.save()
             return redirect('all_ingredients')
-    else:
-        form = IngredientForm(instance=ingredient)
 
-    return render(request, 'ingredient/updateingredient.html', {'form': form, 'ingredient': ingredient})
+        except ValueError:
+            return render(request, 'ingredient/updateingredient.html', {'ingredient': ingredient, 'form': IngredientForm(instance=ingredient)})
 
 
 def delete_ingredient(request, ingredient_id):
