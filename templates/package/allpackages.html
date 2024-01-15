@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>All Packages</h2>
+
+    {% if packages %}
+        <ul>
+            {% for package in packages %}
+                <li>
+                    <span>
+                        {{ package.name }} - {{ package.measure }}
+                    </span>
+                    <form method="post" action="{% url 'update_package' package.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form method="post" action="{% url 'delete_package' package.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No packages available.</p>
+    {% endif %}
+{% endblock %}

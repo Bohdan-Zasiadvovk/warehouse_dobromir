@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Пакування{% endblock %}
+
+{% block content %}
+    <h1>Пакування</h1>
+    <p>Тут ви можете знайти інформацію про пакування</p>
+    <ul>
+        <li><a href="{% url 'create_package' %}">Створити новий</a></li>
+        <li><a href="{% url 'all_packages' %}">Всі пакування</a></li>
+    </ul>
+{% endblock %}

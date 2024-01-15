@@ -1,36 +1,44 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponseNotFound
+from .forms import PackageForm
 from .models import Package
 
 
-def create_package(request, name, measure):
-    if request.method == 'POST':
-        package = Package.objects.create(name=name, measure=measure)
-        return package
+def package(request):
+    return render(request, 'package/package.html')
 
+def create_package(request):
+    if request.method == 'GET':
+        return render(request, 'package/createpackage.html', {'form': PackageForm()})
+    else:
+        try:
+            form = PackageForm(request.POST)
+            new_package = form.save(commit=False)
+            new_package.save()
+            return redirect('all_packages')
+        except ValueError:
+            return render(request, 'package/createpackage.html', {'form': PackageForm(), 'error': 'Bad data passed in. Try again'})
 
 def get_all_packages(request):
-    if request.method == 'GET':
+    if request.method == "GET":
         packages = Package.objects.all()
-        return packages
+        return render(request, 'package/allpackages.html', {'packages': packages})
 
+def update_package(request, package_id):
+    package = get_object_or_404(Package, id=package_id)
 
-def get_package_by_id(request, package_id):
-    if request.method == 'GET':
-        package = Package.objects.get(id=package_id)
-        return package
+    if request.method == "POST":
+        form = PackageForm(request.POST, instance=package)
+        if form.is_valid():
+            form.save()
+            return redirect('all_packages')
+    else:
+        form = PackageForm(instance=package)
 
-
-def update_package(request, package_id, new_name, new_measure):
-    if request.method == 'PATCH':
-        package = Package.objects.get(id=package_id)
-        package.name = new_name
-        package.measure = new_measure
-        package.save()
-        return package
-
+    return render(request, 'package/updatepackage.html', {'form': form, 'package': package})
 
 def delete_package(request, package_id):
-    if request.method == 'DELETE':
-        package = Package.objects.get(id=package_id)
+    package = get_object_or_404(Package, id=package_id)
+
+    if request.method == 'POST':
         package.delete()
+        return redirect('all_packages')
