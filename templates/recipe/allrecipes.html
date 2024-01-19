@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>All Recipes</h2>
+
+    {% if recipes %}
+        <ul>
+            {% for recipe in recipes %}
+                <li>
+                    <span>
+                        <a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.name }}</a>
+                    </span>
+                    <form method="post" action="{% url 'update_recipe' recipe.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form method="post" action="{% url 'delete_recipe' recipe.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No Recipes available.</p>
+    {% endif %}
+{% endblock %}

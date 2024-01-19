@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Recipe item{% endblock %}
+
+{% block content %}
+    <h2>Create Recipe Item</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Recipe Item</button>
+    </form>
+
+    <a href="{% url 'recipe_detail' recipe_id=recipe.id %}">Back to Recipe Details</a>
+{% endblock %}
