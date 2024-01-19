@@ -6,7 +6,7 @@ class Warehouse(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
 
-class WarehouseRecordItem(models.Model):
+class WarehouseItem(models.Model):
     item = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     warehouse_record_item = models.ForeignKey('Warehouse', on_delete=models.CASCADE)
     measure = models.CharField(max_length=20)
