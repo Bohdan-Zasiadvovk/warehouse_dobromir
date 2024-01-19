@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponseNotFound
-from .models import Warehouse, WarehouseRecordItem, Ingredient
+from .models import Warehouse, WarehouseItem, Ingredient
 
 
 def create_warehouse(request):
@@ -40,7 +40,7 @@ def add_warehouse_record_item(request, warehouse_id, item_id, measure, quantity)
         warehouse = Warehouse.objects.get(id=warehouse_id)
         item = Ingredient.objects.get(id=item_id)
 
-        warehouse_record_item = WarehouseRecordItem.objects.create(
+        warehouse_record_item = WarehouseItem.objects.create(
             warehouse=warehouse,
             item=item,
             measure=measure,
@@ -51,13 +51,13 @@ def add_warehouse_record_item(request, warehouse_id, item_id, measure, quantity)
 
 def get_all_warehouse_record_items(request, warehouse_id):
     if request.method == 'GET':
-        warehouse_record_items = WarehouseRecordItem.objects.filter(warehouse_id=warehouse_id)
+        warehouse_record_items = WarehouseItem.objects.filter(warehouse_id=warehouse_id)
         return warehouse_record_items
 
 
 def update_warehouse_record_item(request, warehouse_record_item_id, new_measure, new_quantity):
     if request.method == 'PATCH':
-        warehouse_record_item = WarehouseRecordItem.objects.get(id=warehouse_record_item_id)
+        warehouse_record_item = WarehouseItem.objects.get(id=warehouse_record_item_id)
         warehouse_record_item.measure = new_measure
         warehouse_record_item.quantity = new_quantity
         warehouse_record_item.save()
@@ -66,5 +66,5 @@ def update_warehouse_record_item(request, warehouse_record_item_id, new_measure,
 
 def delete_warehouse_record_item(request, warehouse_record_item_id):
     if request.method == 'DELETE':
-        warehouse_record_item = WarehouseRecordItem.objects.get(id=warehouse_record_item_id)
+        warehouse_record_item = WarehouseItem.objects.get(id=warehouse_record_item_id)
         warehouse_record_item.delete()
