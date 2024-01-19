@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 
 from ingredient import views as ingredient_views
 from package import views as package_views
+from recipe import views as recipe_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,5 +41,15 @@ urlpatterns = [
     path('package/delete/<package_id>/', package_views.delete_package, name='delete_package'),
 
 
+
+    path('recipe/', recipe_views.recipe, name='recipe'),
+    path('recipe/create/', recipe_views.create_recipe, name='create_recipe'),
+    path('recipe/all/', recipe_views.get_all_recipes, name='all_recipes'),
+    path('recipe/update/<recipe_id>/', recipe_views.update_recipe, name='update_recipe'),
+    path('recipe/delete/<recipe_id>/', recipe_views.delete_recipe, name='delete_recipe'),
+    path('recipe/<recipe_id>/', recipe_views.recipe_detail, name='recipe_detail'),
+    path('recipe/<recipe_id>/additem/', recipe_views.create_recipe_item, name='create_recipe_item'),
+    path('recipe/<recipe_id>/updateitem/<recipe_item_id>/', recipe_views.update_recipe_item, name='update_recipe_item'),
+    path('recipe/<recipe_id>/deleteitem/<recipe_item_id>/', recipe_views.delete_recipe_item, name='delete_recipe_item'),
 
 ]
