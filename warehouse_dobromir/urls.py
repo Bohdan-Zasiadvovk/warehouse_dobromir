@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 
-from ingredient import views as ingredient_views
+from item import views as item_views
 from recipe import views as recipe_views
 
 urlpatterns = [
@@ -27,12 +27,12 @@ urlpatterns = [
 
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 
-    path('ingredient/', ingredient_views.ingredient, name='ingredient'),
-    path('ingredient/create/', ingredient_views.create_ingredient, name='create_ingredient'),
-    path('ingredient/all/', ingredient_views.get_all_ingredients, name='all_ingredients'),
-    path('ingredient/update/<ingredient_id>/', ingredient_views.update_ingredient, name='update_ingredient'),
-    path('ingredient/delete/<ingredient_id>/', ingredient_views.delete_ingredient, name='delete_ingredient'),
 
+    path('item/', item_views.item, name='item'),
+    path('item/create/', item_views.create_item, name='create_item'),
+    path('item/all/', item_views.get_all_items, name='all_items'),
+    path('item/update/<item_id>/', item_views.update_item, name='update_item'),
+    path('item/delete/<item_id>/', item_views.delete_item, name='delete_item'),
 
 
 

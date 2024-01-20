@@ -1,5 +1,5 @@
 from django.db import models
-from ingredient.models import Ingredient
+from item.models import Item
 
 
 class Warehouse(models.Model):
@@ -7,7 +7,7 @@ class Warehouse(models.Model):
 
 
 class WarehouseItem(models.Model):
-    item = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
     warehouse_record_item = models.ForeignKey('Warehouse', on_delete=models.CASCADE)
     measure = models.CharField(max_length=20)
     quantity = models.DecimalField(max_digits=10, decimal_places=6)

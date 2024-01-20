@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponseNotFound
-from .models import Warehouse, WarehouseItem, Ingredient
+from .models import Warehouse, WarehouseItem, Item
 
 
 def create_warehouse(request):
@@ -38,7 +38,7 @@ def delete_warehouse(request, warehouse_id):
 def add_warehouse_record_item(request, warehouse_id, item_id, measure, quantity):
     if request.method == 'POST':
         warehouse = Warehouse.objects.get(id=warehouse_id)
-        item = Ingredient.objects.get(id=item_id)
+        item = Item.objects.get(id=item_id)
 
         warehouse_record_item = WarehouseItem.objects.create(
             warehouse=warehouse,
