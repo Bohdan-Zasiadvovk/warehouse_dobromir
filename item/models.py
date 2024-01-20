@@ -19,8 +19,8 @@ class Item(models.Model):
     ]
 
     name = models.CharField(max_length=50)
-    measure = models.CharField(max_length=50, choices=MEASURE_CHOICES)
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    measure = models.CharField(max_length=20, choices=MEASURE_CHOICES)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
 
     def __str__(self):
         return f"{self.name} - {self.measure} ({self.category})"
