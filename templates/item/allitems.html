@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>All Items</h2>
+
+    {% if items %}
+        <ul>
+            {% for item in items %}
+                <li>
+                    <span>
+                        {{ item.name }} - {{ item.measure }}
+                    </span>
+                    <form method="post" action="{% url 'update_item' item.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form method="post" action="{% url 'delete_item' item.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No items available.</p>
+    {% endif %}
+{% endblock %}

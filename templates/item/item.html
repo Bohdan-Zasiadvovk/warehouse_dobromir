@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Item{% endblock %}
+
+{% block content %}
+    <h1>Item</h1>
+    <p>Тут ви можете знайти інформацію про Item.</p>
+    <ul>
+        <li><a href="{% url 'create_item' %}">Створити новий Item</a></li>
+        <li><a href="{% url 'all_items' %}">Всі Items</a></li>
+    </ul>
+{% endblock %}
