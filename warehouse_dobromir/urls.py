@@ -19,7 +19,6 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 from ingredient import views as ingredient_views
-from package import views as package_views
 from recipe import views as recipe_views
 
 urlpatterns = [
@@ -34,11 +33,6 @@ urlpatterns = [
     path('ingredient/update/<ingredient_id>/', ingredient_views.update_ingredient, name='update_ingredient'),
     path('ingredient/delete/<ingredient_id>/', ingredient_views.delete_ingredient, name='delete_ingredient'),
 
-    path('package/', package_views.package, name='package'),
-    path('package/create/', package_views.create_package, name='create_package'),
-    path('package/all/', package_views.get_all_packages, name='all_packages'),
-    path('package/update/<package_id>/', package_views.update_package, name='update_package'),
-    path('package/delete/<package_id>/', package_views.delete_package, name='delete_package'),
 
 
 
