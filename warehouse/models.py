@@ -5,6 +5,9 @@ from item.models import Item
 class Warehouse(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.date
+
 
 class WarehouseItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
