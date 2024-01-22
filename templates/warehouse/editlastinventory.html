@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load get_value_wh_item %}
 
 {% block content %}
   <h2>Редагування останньої інвентаризації</h2>
@@ -6,7 +7,7 @@
     {% csrf_token %}
     {% for item in items %}
       {{ item.name }} - {{ item.measure }}
-      <input type="number" name="item_{{ item.id }}" value="{{ form.initial.get|add:'item_'|add:item.id|stringformat:"s" }}" required>
+      <input type="number" name="item_{{ item.id }}" value="{% get_value_wh_item form.initial 'item_' item.id %}" required>
       <br>
     {% endfor %}
     <button type="submit">Зберегти зміни</button>
