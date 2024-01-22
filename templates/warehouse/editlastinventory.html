@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Редагування останньої інвентаризації</h2>
+  <form method="POST" action="{% url 'edit_last_inventory' %}">
+    {% csrf_token %}
+    {% for item in items %}
+      {{ item.name }} - {{ item.measure }}
+      <input type="number" name="item_{{ item.id }}" value="{{ form.initial.get|add:'item_'|add:item.id|stringformat:"s" }}" required>
+      <br>
+    {% endfor %}
+    <button type="submit">Зберегти зміни</button>
+  </form>
+{% endblock %}

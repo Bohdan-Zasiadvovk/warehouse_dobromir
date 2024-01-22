@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 from item import views as item_views
+from warehouse import views as warehouse_views
 from recipe import views as recipe_views
 
 urlpatterns = [
@@ -33,6 +34,12 @@ urlpatterns = [
     path('item/all/', item_views.get_all_items, name='all_items'),
     path('item/update/<item_id>/', item_views.update_item, name='update_item'),
     path('item/delete/<item_id>/', item_views.delete_item, name='delete_item'),
+
+
+
+    path('warehouse/', warehouse_views.warehouse, name='warehouse'),
+    path('warehouse/newinventory/', warehouse_views.inventory, name='inventory'),
+    path('warehouse/lastinventory/', warehouse_views.edit_last_inventory, name='edit_last_inventory'),
 
 
 
