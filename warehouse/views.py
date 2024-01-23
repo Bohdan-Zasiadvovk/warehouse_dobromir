@@ -60,7 +60,4 @@ def edit_last_inventory(request):
                 warehouse_item.quantity = quantity
                 warehouse_item.save()
 
-                # Оновлення кількості для всіх item одразу
-                Item.objects.filter(id=item.id).update(quantity=quantity)
-
-            return redirect('warehouse')  # Повертаємо відповідь в разі успішного POST запиту
+            return redirect('warehouse')
