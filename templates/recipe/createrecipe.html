@@ -1,11 +1,47 @@
-{% extends 'base.html' %}
+<!-- у вашому create_recipe.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Створення рецепту</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <h2>Створення рецепту</h2>
 
-{% block content %}
-    <h2>Create Recipe</h2>
-
-    <form method="POST">
+    <form method="post" action="{% url 'create_recipe' %}">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create Recipe</button>
+        <label for="recipe_name">Назва рецепту:</label>
+        <input type="text" name="recipe_name" required>
+
+        <div id="recipe-items">
+            <div class="recipe-item">
+                <select name="item" required>
+                    {% for item in items %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                    {% endfor %}
+                </select>
+                
+                <select name="measure" required>
+                    <option value="gram">грам</option>
+                    <option value="centimeter">сантиметр</option>
+                    <option value="piece">штук</option>
+                </select>
+                <input type="text" name="quantity" placeholder="Кількість" required>
+            </div>
+        </div>
+
+        <button type="button" id="add-item">Додати item</button>
+        <button type="submit">Зберегти рецепт</button>
     </form>
-{% endblock %}
+
+    <script>
+        $(document).ready(function () {
+            $('#add-item').click(function () {
+                var newItem = $('.recipe-item:first').clone();
+                newItem.find(':input').val('');
+                $('#recipe-items').append(newItem);
+            });
+        });
+    </script>
+</body>
+</html>
