@@ -24,6 +24,10 @@ def create_recipe(request):
         return redirect('recipe')  # Перенаправлення на іншу сторінку, наприклад, список рецептів
 
     items = Item.objects.all()
-    return render(request, 'recipe/createrecipe.html', {'items': items})
+    contex = {'items': items, "measures": []}
+    measure_items = RecipeItem.MEASURE_CHOICES
+    for measure in measure_items:
+        contex["measures"].append(list(measure))
+    return render(request, 'recipe/createrecipe.html', contex)
 
 

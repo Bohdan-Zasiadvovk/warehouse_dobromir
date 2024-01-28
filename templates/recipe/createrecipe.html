@@ -20,11 +20,10 @@
                         <option value="{{ item.id }}">{{ item.name }}</option>
                     {% endfor %}
                 </select>
-                
                 <select name="measure" required>
-                    <option value="gram">грам</option>
-                    <option value="centimeter">сантиметр</option>
-                    <option value="piece">штук</option>
+                    {% for choice in measures %}
+                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                    {% endfor %}
                 </select>
                 <input type="text" name="quantity" placeholder="Кількість" required>
             </div>
