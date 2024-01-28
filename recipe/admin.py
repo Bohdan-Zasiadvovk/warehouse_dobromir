@@ -2,5 +2,12 @@ from django.contrib import admin
 from .models import Recipe, RecipeItem
 
 
-admin.site.register(Recipe)
-admin.site.register(RecipeItem)
+class RecipeItemInline(admin.TabularInline):
+    model = RecipeItem
+
+
+class RecipeAdmin(admin.ModelAdmin):
+    inlines = [RecipeItemInline]
+
+
+admin.site.register(Recipe, RecipeAdmin)
