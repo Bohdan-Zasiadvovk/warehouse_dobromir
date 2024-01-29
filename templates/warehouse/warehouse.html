@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Warehouse{% endblock %}
+
+{% block content %}
+    <h1>Warehouse</h1>
+    <p>Тут ви можете знайти інформацію про склад.</p>
+    <ul>
+        <li><a href="{% url 'inventory' %}">Провести інвентаризацію</a></li>
+        <li><a href="{% url 'edit_last_inventory' %}">Крайня інвентаризація</a></li>
+    </ul>
+{% endblock %}

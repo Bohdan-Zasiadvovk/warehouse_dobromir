@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Інвентаризація</h2>
+  <form method="post" action="{% url 'inventory' %}">
+    {% csrf_token %}
+    {% for item in items %}
+      {{ item.name }} - {{ item.measure }} 
+      <input type="number" name="item_{{ item.id }}" required>
+      <br>
+    {% endfor %}
+    <button type="submit">Провести інвентаризацію</button>
+  </form>
+{% endblock %}
