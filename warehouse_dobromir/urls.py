@@ -18,25 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 
-from item import views as item_views
-from recipe import views as recipe_views
+from item import urls as item_urls
+from warehouse import urls as warehouse_urls
+from recipe import urls as recipe_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
-
-
-    path('item/', item_views.item, name='item'),
-    path('item/create/', item_views.create_item, name='create_item'),
-    path('item/all/', item_views.get_all_items, name='all_items'),
-    path('item/update/<item_id>/', item_views.update_item, name='update_item'),
-    path('item/delete/<item_id>/', item_views.delete_item, name='delete_item'),
-
-
-
-    path('recipe/', recipe_views.recipe, name='recipe'),
-    path('recipe/create/', recipe_views.create_recipe, name='create_recipe'),
+    path('item/', include(item_urls)),
+    path('recipe/', include(recipe_urls)),
+    path('warehouse/', include(warehouse_urls)),
 
 ]
