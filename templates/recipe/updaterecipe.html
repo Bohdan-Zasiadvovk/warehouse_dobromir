@@ -1,0 +1,36 @@
+<!-- У вашому файлі updaterecipe.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редагування рецепту</title>
+</head>
+<body>
+<h2>Редагування рецепту: {{ recipe.name }}</h2>
+
+<form method="post" action="{% url 'update_recipe' recipe.id %}">
+    {% csrf_token %}
+    <label for="recipe_name">Назва рецепту:</label>
+    <input type="text" name="recipe_name" value="{{ recipe.name }}" required>
+
+    <h3>Складники:</h3>
+    {% for recipe_item in recipe_items %}
+        <div class="recipe-item">
+            {{ recipe_item.item.name }}
+            {{ recipe_item.measure }}
+{#            <label for="measure">Міра:</label>#}
+{#            <select name="measure_{{ recipe_item.id }}" required>#}
+{#                {% for choice in recipe_item.MEASURE_CHOICES %}#}
+{#                    <option value="{{ choice.0 }}"#}
+{#                            {% if choice.0 == recipe_item.measure %}selected{% endif %}>{{ choice.1 }}</option>#}
+{#                {% endfor %}#}
+{#            </select>#}
+{#            ToDo: recipe_item.measure ukrainian #}
+            <label for="quantity">Кількість:</label>
+            <input type="text" name="quantity_{{ recipe_item.id }}" value="{{ recipe_item.quantity }}" required>
+        </div>
+    {% endfor %}
+
+    <button type="submit">Зберегти рецепт</button>
+</form>
+</body>
+</html>
