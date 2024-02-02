@@ -41,7 +41,9 @@ def all_recipes(request):
 
 def recipe_detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    context = {'recipe': recipe}
+    recipe_items = RecipeItem.objects.filter(recipe=recipe)
+
+    context = {'recipe': recipe, 'recipe_items': recipe_items}
     return render(request, 'recipe/recipedetail.html', context)
 
 
