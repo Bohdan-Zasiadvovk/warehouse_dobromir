@@ -1,6 +1,25 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список рецептів</title>
+</head>
+<body>
+<h2>Список рецептів</h2>
+<ul>
+    {% for recipe in recipes %}
+        <li>
+            <a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.name }}</a>
 
-{% block content %}
-    <h2>All Recipes</h2>
-
-{% endblock %}
+            <form action="{% url 'update_recipe' recipe.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Редагувати</button>
+            </form>
+            <form action="{% url 'delete_recipe' recipe.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Видалити</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+</body>
+</html>
