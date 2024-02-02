@@ -16,15 +16,7 @@
     {% for recipe_item in recipe_items %}
         <div class="recipe-item">
             {{ recipe_item.item.name }}
-            {{ recipe_item.measure }}
-{#            <label for="measure">Міра:</label>#}
-{#            <select name="measure_{{ recipe_item.id }}" required>#}
-{#                {% for choice in recipe_item.MEASURE_CHOICES %}#}
-{#                    <option value="{{ choice.0 }}"#}
-{#                            {% if choice.0 == recipe_item.measure %}selected{% endif %}>{{ choice.1 }}</option>#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#            ToDo: recipe_item.measure ukrainian #}
+            {{ recipe_item.get_measure_display }}
             <label for="quantity">Кількість:</label>
             <input type="text" name="quantity_{{ recipe_item.id }}" value="{{ recipe_item.quantity }}" required>
         </div>
