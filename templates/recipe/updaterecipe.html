@@ -19,6 +19,7 @@
             {{ recipe_item.get_measure_display }}
             <label for="quantity">Кількість:</label>
             <input type="text" name="quantity_{{ recipe_item.id }}" value="{{ recipe_item.quantity }}" required>
+            <button type="submit" name="delete_item_{{ recipe_item.id }}">Видалити</button>
         </div>
     {% endfor %}
 

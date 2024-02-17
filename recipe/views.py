@@ -65,11 +65,7 @@ def update_recipe(request, recipe_id):
         recipe.save()
 
         for recipe_item in recipe_items:
-            # measure = request.POST.get(f'measure_{recipe_item.id}')
             quantity = request.POST.get(f'quantity_{recipe_item.id}')
-
-            # Оновлення складників рецепту
-            # recipe_item.measure = measure
             recipe_item.quantity = quantity
             recipe_item.save()
 
@@ -87,3 +83,12 @@ def delete_recipe(request, recipe_id):
         return redirect('all_recipes')  # Перенаправлення на список рецептів
 
     return HttpResponse("Метод GET не підтримується для цієї сторінки.")
+
+def delete_recipe_item(request, recipe_item_id):
+    recipe_item = get_object_or_404(RecipeItem, id=recipe_item_id)
+    recipe_id = recipe_item.recipe.id  # Збережемо ідентифікатор рецепту перед видаленням
+
+    if request.method == 'POST':
+        recipe_item.delete()
+
+    return redirect('update_recipe', recipe_id=recipe_id)
