@@ -53,12 +53,18 @@ def update_recipe(request, recipe_id):
 
     if request.method == 'POST':
         recipe_name = request.POST.get('recipe_name')
+        items = request.POST.getlist('item')
+        measures = request.POST.getlist('measure')
+        quantities = request.POST.getlist('quantity')
 
         # Перевірка, чи надійшла непорожня назва
         if not recipe_name:
             # Обробка помилки, наприклад, повернення на ту ж сторінку з повідомленням про помилку
-            context = {'recipe': recipe, 'recipe_items': recipe_items,
-                       'error_message': 'Назва рецепту не може бути порожньою'}
+            items = Item.objects.all()
+            context = {'recipe': recipe, 'recipe_items': recipe_items, 'items': items, "measures": [], 'error_message': 'Назва рецепту не може бути порожньою'}
+            measure_items = RecipeItem.MEASURE_CHOICES
+            for measure in measure_items:
+                context["measures"].append(list(measure))
             return render(request, 'recipe/updaterecipe.html', context)
 
         # Оновлення основної інформації рецепту
@@ -75,11 +81,19 @@ def update_recipe(request, recipe_id):
             if delete_key in request.POST:
                 recipe_item.delete()
 
+        for item, measure, quantity in zip(items, measures, quantities):
+            item_obj = Item.objects.get(pk=item)
+            RecipeItem.objects.create(recipe=recipe, item=item_obj, measure=measure, quantity=quantity)
+
         return redirect('update_recipe', recipe_id=recipe_id)
 
         # return redirect('all_recipes')
 
-    context = {'recipe': recipe, 'recipe_items': recipe_items}
+    items = Item.objects.all()
+    context = {'recipe': recipe, 'recipe_items': recipe_items, 'items': items, "measures": []}
+    measure_items = RecipeItem.MEASURE_CHOICES
+    for measure in measure_items:
+        context["measures"].append(list(measure))
     return render(request, 'recipe/updaterecipe.html', context)
 
 
