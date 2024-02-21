@@ -53,9 +53,24 @@ def update_recipe(request, recipe_id):
 
     if request.method == 'POST':
         recipe_name = request.POST.get('recipe_name')
-        items = request.POST.getlist('item')
-        measures = request.POST.getlist('measure')
-        quantities = request.POST.getlist('quantity')
+
+        items = {}
+
+        # Проходимось по ключам у POST-запиті
+        for key in request.POST.keys():
+            # Розділяємо ключ на частини за допомогою '[', ']', отримуємо індекс
+            if '[' in key and ']' in key:
+                index = key.split('[')[1].split(']')[0]
+                # Перевіряємо, чи маємо айтем з таким індексом
+                if index.isdigit():
+                    index = int(index)
+                    # Якщо це новий айтем, створюємо новий словник для нього
+                    if index not in items:
+                        items[index] = {}
+                    # Визначаємо тип даних (measure, quantity) та додаємо його до словника
+                    field_type = key.split('[')[0]
+                    items[index][field_type] = request.POST[key]
+        items = items.values()
 
         # Перевірка, чи надійшла непорожня назва
         if not recipe_name:
@@ -81,9 +96,9 @@ def update_recipe(request, recipe_id):
             if delete_key in request.POST:
                 recipe_item.delete()
 
-        for item, measure, quantity in zip(items, measures, quantities):
-            item_obj = Item.objects.get(pk=item)
-            RecipeItem.objects.create(recipe=recipe, item=item_obj, measure=measure, quantity=quantity)
+        for item in items:
+            item_obj = Item.objects.get(pk=item['item'])
+            RecipeItem.objects.create(recipe=recipe, item=item_obj, measure=item['measure'], quantity=item['quantity'])
 
         return redirect('update_recipe', recipe_id=recipe_id)
 
