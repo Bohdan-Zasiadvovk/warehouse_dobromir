@@ -48,64 +48,48 @@ def recipe_detail(request, recipe_id):
 
 
 def update_recipe(request, recipe_id):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    recipe_items = RecipeItem.objects.filter(recipe=recipe)
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
 
     if request.method == 'POST':
         recipe_name = request.POST.get('recipe_name')
+        items = request.POST.getlist('item')
+        measures = request.POST.getlist('measure')
+        quantities = request.POST.getlist('quantity')
 
-        items = {}
-
-        # Проходимось по ключам у POST-запиті
-        for key in request.POST.keys():
-            # Розділяємо ключ на частини за допомогою '[', ']', отримуємо індекс
-            if '[' in key and ']' in key:
-                index = key.split('[')[1].split(']')[0]
-                # Перевіряємо, чи маємо айтем з таким індексом
-                if index.isdigit():
-                    index = int(index)
-                    # Якщо це новий айтем, створюємо новий словник для нього
-                    if index not in items:
-                        items[index] = {}
-                    # Визначаємо тип даних (measure, quantity) та додаємо його до словника
-                    field_type = key.split('[')[0]
-                    items[index][field_type] = request.POST[key]
-        items = items.values()
-
-        # Перевірка, чи надійшла непорожня назва
         if not recipe_name:
             # Обробка помилки, наприклад, повернення на ту ж сторінку з повідомленням про помилку
+            recipe_items = recipe.recipeitem_set.all()
             items = Item.objects.all()
-            context = {'recipe': recipe, 'recipe_items': recipe_items, 'items': items, "measures": [], 'error_message': 'Назва рецепту не може бути порожньою'}
+            context = {'recipe': recipe, 'recipe_items': recipe_items, 'items': items, "measures": [],
+                       'error_message': 'Назва рецепту не може бути порожньою'}
             measure_items = RecipeItem.MEASURE_CHOICES
             for measure in measure_items:
                 context["measures"].append(list(measure))
             return render(request, 'recipe/updaterecipe.html', context)
 
-        # Оновлення основної інформації рецепту
+        # Оновлення існуючого рецепту
         recipe.name = recipe_name
         recipe.save()
 
-        for recipe_item in recipe_items:
-            quantity = request.POST.get(f'quantity_{recipe_item.id}')
-            recipe_item.quantity = quantity
-            recipe_item.save()
+        # Очищення існуючих RecipeItem для даного рецепту
+        recipe.recipeitem_set.all().delete()
 
-        for recipe_item in recipe_items:
-            delete_key = f'delete_item_{recipe_item.id}'
-            if delete_key in request.POST:
-                recipe_item.delete()
+        # Додавання нових RecipeItem
+        for item, measure, quantity in zip(items, measures, quantities):
+            item_obj = Item.objects.get(pk=item)
+            RecipeItem.objects.create(recipe=recipe, item=item_obj, measure=measure, quantity=quantity)
 
-        for item in items:
-            item_obj = Item.objects.get(pk=item['item'])
-            RecipeItem.objects.create(recipe=recipe, item=item_obj, measure=item['measure'], quantity=item['quantity'])
+        delete_item_id = request.POST.get('delete_item_id')
+        if delete_item_id:
+            RecipeItem.objects.filter(id=delete_item_id).delete()
 
-        return redirect('update_recipe', recipe_id=recipe_id)
+        return redirect('all_recipes')
 
-        # return redirect('all_recipes')
+    # Отримання існуючих RecipeItem для рецепту
+    recipe_items = recipe.recipeitem_set.all()
 
     items = Item.objects.all()
-    context = {'recipe': recipe, 'recipe_items': recipe_items, 'items': items, "measures": []}
+    context = {'recipe': recipe, 'items': items, 'measures': [], 'recipe_items': recipe_items}
     measure_items = RecipeItem.MEASURE_CHOICES
     for measure in measure_items:
         context["measures"].append(list(measure))
@@ -120,12 +104,3 @@ def delete_recipe(request, recipe_id):
         return redirect('all_recipes')  # Перенаправлення на список рецептів
 
     return HttpResponse("Метод GET не підтримується для цієї сторінки.")
-
-
-# def delete_recipe_item(request, recipe_item_id):
-#     recipe_item = get_object_or_404(RecipeItem, id=recipe_item_id)
-#     recipe_id = recipe_item.recipe.id  # Збережемо ідентифікатор рецепту перед видаленням
-#
-#     if request.method == 'POST':
-#         recipe_item.delete()
-#         return redirect('update_recipe', recipe_id=recipe_id)

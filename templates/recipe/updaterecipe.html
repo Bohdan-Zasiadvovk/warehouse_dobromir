@@ -5,77 +5,56 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
-<h2>Редагування рецепту: {{ recipe.name }}</h2>
+<h2>Редагування рецепту</h2>
 
 <form method="post" action="{% url 'update_recipe' recipe.id %}">
     {% csrf_token %}
     <label for="recipe_name">Назва рецепту:</label>
     <input type="text" name="recipe_name" value="{{ recipe.name }}" required>
 
-    <h3>Складники:</h3>
     <div id="recipe-items">
         {% for recipe_item in recipe_items %}
             <div class="recipe-item">
-                {{ recipe_item.item.name }}
-                {{ recipe_item.get_measure_display }}
-                <label for="quantity">Кількість:</label>
-                <input type="text" name="quantity_{{ recipe_item.id }}" value="{{ recipe_item.quantity }}" required>
-                <button type="submit" name="delete_item_{{ recipe_item.id }}">Видалити</button>
+                <select name="item" required>
+                    {% for item in items %}
+                        <option value="{{ item.id }}"
+                                {% if item.id == recipe_item.item.id %}selected{% endif %}>{{ item.name }}</option>
+                    {% endfor %}
+                </select>
+                <select name="measure" required>
+                    {% for choice in measures %}
+                        <option value="{{ choice.0 }}"
+                                {% if choice.0 == recipe_item.measure %}selected{% endif %}>{{ choice.1 }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="quantity" value="{{ recipe_item.quantity }}" placeholder="Кількість" required>
+                <button type="button" class="delete-item" data-item-id="{{ recipe_item.id }}">Видалити</button>
             </div>
         {% endfor %}
     </div>
 
-{#            <div id="new-item-template" >#}
-{#                <div class="recipe-item">#}
-{#                    <select name="item" required>#}
-{#                        {% for item in items %}#}
-{#                            <option value="{{ item.id }}">{{ item.name }}</option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                    <select name="measure" required>#}
-{#                        {% for choice in measures %}#}
-{#                            <option value="{{ choice.0 }}">{{ choice.1 }}</option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                    <input type="text" name="quantity" placeholder="Кількість" required>#}
-{#                </div>#}
-{#            </div>#}
-
-    <button type="button" id="add-item">Додати інгредієнт</button>
-    <button type="submit">Зберегти рецепт</button>
+    <button type="button" id="add-item">Додати item</button>
+    <button type="submit">Оновити рецепт</button>
 </form>
-
-{#    <script>#}
-{#        $(document).ready(function () {#}
-{#            $('#add-item').click(function () {#}
-{#                var newItem = $('#new-item-template .recipe-item').clone();#}
-{#                newItem.find(':input').val('');#}
-{#                $('#recipe-items').append(newItem);#}
-{#            });#}
-{#        });#}
-{#    </script>#}
 
 <script>
     $(document).ready(function () {
-        var itemCount = {{ recipe_items|length }} + 1; // Отримуємо кількість елементів з сервера
+        // Додавання кнопок для видалення інгредієнтів
+        $('.delete-item').click(function () {
+            var itemId = $(this).data('item-id');
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'delete_item_id',
+                value: itemId
+            }).appendTo('form');
+            $(this).closest('.recipe-item').remove();
+        });
 
+        // Додатковий код для додавання нових інгредієнтів
         $('#add-item').click(function () {
-            var newItem = $('<div class="recipe-item">' +
-                '<select name="item[' + itemCount + ']" required>' +
-                '{% for item in items %}' +
-                '<option value="{{ item.id }}">{{ item.name }}</option>' +
-                '{% endfor %}' +
-                '</select>' +
-                '<select name="measure[' + itemCount + ']" required>' +
-                '{% for choice in measures %}' +
-                '<option value="{{ choice.0 }}">{{ choice.1 }}</option>' +
-                '{% endfor %}' +
-                '</select>' +
-                '<input type="text" name="quantity[' + itemCount + ']" placeholder="Кількість" required>' +
-                '</div>');
-
+            var newItem = $('.recipe-item:first').clone();
+            newItem.find(':input').val('');
             $('#recipe-items').append(newItem);
-            itemCount++;
         });
     });
 </script>
