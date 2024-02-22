@@ -39,8 +39,29 @@
 
 <script>
     $(document).ready(function () {
+        var itemCount = {{ recipe_items|length }}; // Ініціалізуємо лічильник
+
+        $('#add-item').click(function () {
+            var newItem = $('<div class="recipe-item">' +
+                '<select name="item" required>' +
+                '{% for item in items %}' +
+                    '<option value="{{ item.id }}">{{ item.name }}</option>' +
+                    '{% endfor %}' +
+                '</select>' +
+                '<select name="measure" required>' +
+                '{% for choice in measures %}' +
+                    '<option value="{{ choice.0 }}">{{ choice.1 }}</option>' +
+                    '{% endfor %}' +
+                '</select>' +
+                '<input type="text" name="quantity" placeholder="Кількість" required>' +
+                '</div>');
+
+            $('#recipe-items').append(newItem);
+            itemCount++;
+        });
+
         // Додавання кнопок для видалення інгредієнтів
-        $('.delete-item').click(function () {
+        $(document).on('click', '.delete-item', function () {
             var itemId = $(this).data('item-id');
             $('<input>').attr({
                 type: 'hidden',
@@ -48,13 +69,6 @@
                 value: itemId
             }).appendTo('form');
             $(this).closest('.recipe-item').remove();
-        });
-
-        // Додатковий код для додавання нових інгредієнтів
-        $('#add-item').click(function () {
-            var newItem = $('.recipe-item:first').clone();
-            newItem.find(':input').val('');
-            $('#recipe-items').append(newItem);
         });
     });
 </script>
