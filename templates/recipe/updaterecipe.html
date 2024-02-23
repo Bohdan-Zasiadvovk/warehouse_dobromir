@@ -25,7 +25,7 @@
                                     {% if choice.0 == recipe_item.measure %}selected{% endif %}>{{ choice.1 }}</option>
                         {% endfor %}
                     </select>
-                    <input type="text" name="quantity" value="{{ recipe_item.quantity }}" placeholder="Кількість"
+                    <input type="number" step="0.01" name="quantity" value="{{ recipe_item.quantity }}" placeholder="Кількість"
                            required>
                     <button type="button" class="delete-item" data-item-id="{{ recipe_item.id }}">Видалити</button>
                 </div>
