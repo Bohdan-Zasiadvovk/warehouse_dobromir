@@ -1,24 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Деталі рецепту: {{ recipe.name }}</title>
-</head>
-<body>
-<h2>Деталі рецепту: {{ recipe.name }}</h2>
+{% extends 'base.html' %}
 
-<h3>Інгредієнти:</h3>
-<ul>
-    {% for recipe_item in recipe_items %}
-        <li>{{ recipe_item.item.name }} - {{ recipe_item.quantity }} {{ recipe_item.get_measure_display }}</li>
-    {% endfor %}
-</ul>
-<form action="{% url 'update_recipe' recipe.id %}" method="post" style="display:inline;">
-    {% csrf_token %}
-    <button type="submit">Редагувати</button>
-</form>
-<form action="{% url 'delete_recipe' recipe.id %}" method="post" style="display:inline;">
-    {% csrf_token %}
-    <button type="submit">Видалити</button>
-</form>
-</body>
-</html>
+{% block title %}Деталі рецепту: {{ recipe.name }}{% endblock %}
+
+{% block content %}
+    <h2>Деталі рецепту: {{ recipe.name }}</h2>
+
+    <h3>Інгредієнти:</h3>
+    <ul>
+        {% for recipe_item in recipe_items %}
+            <li>{{ recipe_item.item.name }} - {{ recipe_item.quantity }} {{ recipe_item.get_measure_display }}</li>
+        {% endfor %}
+    </ul>
+
+    <form action="{% url 'update_recipe' recipe.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Редагувати</button>
+    </form>
+
+    <form action="{% url 'delete_recipe' recipe.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Видалити</button>
+    </form>
+{% endblock %}
