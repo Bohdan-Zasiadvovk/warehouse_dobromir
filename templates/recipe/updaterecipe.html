@@ -52,7 +52,7 @@
                         '<option value="{{ choice.0 }}">{{ choice.1 }}</option>' +
                         '{% endfor %}' +
                     '</select>' +
-                    '<input type="text" name="quantity" placeholder="Кількість" required>' +
+                    '<input type="number" step="0.01" placeholder="Кількість" required>' +
                     '</div>');
 
                 $('#recipe-items').append(newItem);
